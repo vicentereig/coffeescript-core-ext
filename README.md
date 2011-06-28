@@ -20,3 +20,19 @@ I'll probably end up writing a similar class to [ActiveSupport::Duration](https:
   11.5.divmod(3.5) # [3,1]
 ```
 
+## Building the JavaScript code
+If you want the generated Javascript to be minified donwload http://closure-compiler.googlecode.com/files/compiler-latest.zip
+
+```bash
+vicente@simba:~/Workspaces/coffeescript-core-ext (master)$ sh build.sh
+Building date.js...
+Building number.js...
+Building date.min.js...
+Building number.min.js...
+Done:
+3.1K	date.js
+2.3K	date.min.js
+323	number.js
+232	number.min.js
+
+```
