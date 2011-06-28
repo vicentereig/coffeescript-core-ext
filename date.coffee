@@ -16,14 +16,15 @@ Number::day     ||= Number::days
 Number::weeks   ||= -> 7.days() * @
 Number::week    ||= Number::weeks
 
-Number::months  ||= -> 30.days() * @
+Number::months  ||= -> 31.days() * @
 Number::month   ||= Number::months
 
-Number::years   ||= -> 365.25.days() * @
+Number::years   ||= -> 366.days() * @
 Number::year    ||= Number::years
 
-Date::isLeap         ||= -> new Date(@getFullYear(),1,29).getDate() == 29
-Date::lastDayInMonth ||= -> 32 - new Date(@getFullYear(), @getMonth(), 32).getDate()
+Date::toString       ||= -> "#{@getUTCFullYear()}/#{@getUTCMonth()}/#{@getUTCDate()}"
+Date::isLeap         ||= -> new Date(@getUTCFullYear(),1,29).getDate() == 29
+Date::lastDayInMonth ||= -> 32 - new Date(@getUTCFullYear(), @getUTCMonth(), 32).getDate()
 
 Date::advance ||= (opts={}) ->
   millis  = opts.seconds?.seconds() or 0
@@ -34,6 +35,6 @@ Date::advance ||= (opts={}) ->
   millis += opts.months?.months()   or opts.month?.months()  or 0
   millis += opts.years?.years()     or opts.year?.year()     or 0
 
-  millis += 1.day() if @getMonth() > 0 and @isLeap()
-
-  new Date(@getTime()+millis)
+  d = new Date(@getTime())
+  d.setUTCMilliseconds d.getUTCMilliseconds()+millis
+  d
