@@ -23,11 +23,11 @@
   });
   Number.prototype.week || (Number.prototype.week = Number.prototype.weeks);
   Number.prototype.months || (Number.prototype.months = function() {
-    return (30).days() * this;
+    return (31).days() * this;
   });
   Number.prototype.month || (Number.prototype.month = Number.prototype.months);
   Number.prototype.years || (Number.prototype.years = function() {
-    return 365.25.days() * this;
+    return (366).days() * this;
   });
   Number.prototype.year || (Number.prototype.year = Number.prototype.years);
   Date.prototype.toString || (Date.prototype.toString = function() {
