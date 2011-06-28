@@ -1,34 +1,39 @@
-Number::seconds ||= -> return @.valueOf()
+# TO READ: http://stackoverflow.com/questions/492994/compare-2-dates-with-javascript
+Number::millis  ||= -> @valueOf()
+Number::seconds ||= -> 1000.millis() * @
+
 Number::second  ||= Number::seconds
 
-Number::minutes ||= -> return @.seconds() * 60
+Number::minutes ||= -> 60.seconds() * @
 Number::minute  ||= Number::minutes
 
-Number::hours   ||= -> return @.minutes() * 60
+Number::hours   ||= -> 60.minutes() * @
 Number::hour    ||= Number::hours
 
-Number::days    ||= -> return @.hours() * 24
+Number::days    ||= -> 24.hours() * @
 Number::day     ||= Number::days
 
-Number::weeks   ||= -> return @.days() * 7
-Number::week   ||= Number::weeks
+Number::weeks   ||= -> 7.days() * @
+Number::week    ||= Number::weeks
 
-Number::months  ||= -> return @.weeks() * 4
+Number::months  ||= -> 30.days() * @
 Number::month   ||= Number::months
 
-Number::years   ||= -> return @.days() * 365
-Number::year   ||= Number::years
+Number::years   ||= -> 365.25.days() * @
+Number::year    ||= Number::years
 
-Date::lastDayInMonth   ||= -> return 32 - new Date(@getFullYear(), @getMonth(), 32).getDate()
+Date::isLeap         ||= -> new Date(@getFullYear(),1,29).getDate() == 29
+Date::lastDayInMonth ||= -> 32 - new Date(@getFullYear(), @getMonth(), 32).getDate()
 
 Date::advance ||= (opts={}) ->
-  seconds = opts.seconds || 0
-  minutes = opts.minutes?.minutes() || 0
-  hours   = opts.hours?.hours() || 0
-  days    = opts.days?.days() || 0
-  weeks   = opts.weeks?.weeks() || 0
-  months  = opts.months?.months() || 0
-  years   = opts.years?.years() || 0
+  millis  = opts.seconds?.seconds() or 0
+  millis += opts.minutes?.minutes() or opts.minute?.minute() or 0
+  millis += opts.hours?.hours()     or opts.hour?.hour()     or 0
+  millis += opts.days?.days()       or opts.day?.day()       or 0
+  millis += opts.weeks?.weeks()     or opts.week?.week()     or 0
+  millis += opts.months?.months()   or opts.month?.months()  or 0
+  millis += opts.years?.years()     or opts.year?.year()     or 0
 
-  @setSeconds seconds+minutes+hours+days+weeks+months+years
-  @
+  millis += 1.day() if @getMonth() > 0 and @isLeap()
+
+  new Date(@getTime()+millis)
